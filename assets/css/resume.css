@@ -5,11 +5,15 @@
 
 .page-shell {
     position: relative;
-    min-height: 100vh;
-    padding: clamp(2rem, 5vw, 3rem);
+    min-height: 100svh;
+    min-height: 100dvh;
+    width: min(100%, 1180px);
+    margin: 0 auto;
+    padding: clamp(0.7rem, 1.4vh, 1rem) clamp(0.9rem, 2vw, 1.4rem) clamp(0.8rem, 1.3vh, 1rem);
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: clamp(0.55rem, 1.1vh, 0.8rem);
+    justify-content: flex-start;
 }
 
 .back-link {
@@ -18,7 +22,7 @@
     gap: 0.5rem;
     width: max-content;
     font-family: Consolas, "Courier New", monospace;
-    font-size: 0.8rem;
+    font-size: clamp(0.7rem, 1.1vw, 0.8rem);
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--text-cyan);
@@ -38,9 +42,9 @@
 }
 
 .page-heading__title {
-    margin: 0 0 0.5rem;
+    margin: 0 0 0.4rem;
     font-family: Consolas, "Courier New", monospace;
-    font-size: clamp(1.95rem, 4vw, 2.8rem);
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
     letter-spacing: 0.28em;
     text-transform: uppercase;
     color: #dffbff;
@@ -48,7 +52,7 @@
 
 .page-heading__subtitle {
     margin: 0;
-    font-size: 0.95rem;
+    font-size: clamp(0.72rem, 1vw, 0.9rem);
     letter-spacing: 0.16em;
     text-transform: uppercase;
     color: rgba(200, 248, 255, 0.72);
@@ -56,17 +60,18 @@
 
 .resume-grid {
     display: grid;
-    grid-template-columns: 1.1fr 0.9fr;
-    gap: 1.2rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(0.9rem, 1.5vw, 1.2rem);
 }
 
 .resume-card {
-    padding: 1.2rem;
+    padding: clamp(0.8rem, 1.1vw, 1rem);
     border: 1px solid var(--panel-border);
     background: linear-gradient(135deg, rgba(6, 12, 19, 0.95), rgba(11, 20, 28, 0.84));
     backdrop-filter: blur(10px);
     opacity: 0;
     transform: translateY(18px);
+    min-width: 0;
 }
 
 .resume-card__title {
@@ -103,7 +108,8 @@
 
 .resume-item__value {
     color: #f4ffff;
-    line-height: 1.65;
+    line-height: 1.45;
+    font-size: 0.92rem;
 }
 
 .action-btn {

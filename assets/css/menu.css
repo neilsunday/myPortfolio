@@ -16,13 +16,15 @@ body {
 }
 
 body {
-    min-height: 100vh;
+    min-height: 100svh;
+    min-height: 100dvh;
     display: flex;
     align-items: center;
     justify-content: flex-start;
     background: #03060b;
     color: var(--text-cyan);
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
     cursor: none;
 }
 
@@ -147,26 +149,26 @@ body::after {
     position: relative;
     z-index: 1;
     width: min(92vw, 560px);
-    min-height: 100vh;
+    min-height: min(100svh, 100%);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
     text-align: left;
-    padding: clamp(2rem, 6vw, 4.2rem);
+    padding: clamp(1rem, 3.2vh, 2.2rem);
     isolation: isolate;
 }
 
 .menu-header {
-    margin-bottom: 2.4rem;
+    margin-bottom: clamp(1rem, 2.2vh, 2.2rem);
     opacity: 0;
     transform: translateY(16px);
     animation: titleIn 1.1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s forwards;
 }
 
 .portfolio-label {
-    margin: 0 0 0.55rem;
-    font-size: 0.72rem;
+    margin: 0 0 0.4rem;
+    font-size: clamp(0.62rem, 0.85vw, 0.72rem);
     letter-spacing: 0.28em;
     text-transform: uppercase;
     color: var(--text-subtle);
@@ -178,7 +180,7 @@ body::after {
     gap: 0.04em;
     margin: 0;
     font-family: Consolas, "Courier New", monospace;
-    font-size: clamp(2.4rem, 5vw, 4rem);
+    font-size: clamp(2rem, 4.5vw, 3.4rem);
     letter-spacing: 0.32em;
     text-transform: uppercase;
     color: #dffbff;
@@ -206,7 +208,7 @@ body::after {
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 0.35rem;
+    gap: clamp(0.2rem, 0.8vh, 0.4rem);
     align-items: flex-start;
     max-width: 480px;
 }
@@ -216,10 +218,10 @@ body::after {
     display: flex;
     align-items: center;
     width: 100%;
-    padding: 0.85rem 0 0.95rem;
+    padding: clamp(0.7rem, 1.3vh, 0.95rem) 0;
     color: var(--text-cyan);
     font-family: Consolas, "Courier New", monospace;
-    font-size: clamp(0.95rem, 1.6vw, 1.05rem);
+    font-size: clamp(0.9rem, 1.4vw, 1.05rem);
     letter-spacing: 0.22em;
     text-transform: uppercase;
     text-decoration: none;
@@ -272,7 +274,7 @@ body::after {
 }
 
 .menu-item__subtitle {
-    font-size: 0.72rem;
+    font-size: clamp(0.62rem, 0.95vw, 0.72rem);
     letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--text-subtle);
@@ -406,6 +408,35 @@ body.menu-hover .cursor-glow {
     height: 72px;
     border-color: rgba(95, 232, 255, 0.9);
     box-shadow: 0 0 30px rgba(95, 232, 255, 0.22);
+}
+
+@media (max-height: 760px) {
+    .menu-shell {
+        padding-block: 1rem;
+    }
+
+    .menu-header {
+        margin-bottom: 0.9rem;
+    }
+
+    .menu-nav {
+        gap: 0.15rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .menu-shell {
+        width: min(95vw, 560px);
+        padding: 1rem 1rem 1.2rem;
+    }
+
+    .game-title {
+        letter-spacing: 0.2em;
+    }
+
+    .menu-item {
+        letter-spacing: 0.16em;
+    }
 }
 
 @keyframes titleIn {

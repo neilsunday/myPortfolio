@@ -34,11 +34,7 @@ interactiveElements.forEach((item) => {
         document.body.classList.remove('menu-hover');
     });
 
-    item.addEventListener('click', (event) => {
-        if (item.matches('a')) {
-            event.preventDefault();
-        }
-
+    item.addEventListener('click', () => {
         if (!item.classList.contains('menu-item')) {
             playSound(clickSound);
         }

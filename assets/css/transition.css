@@ -23,6 +23,7 @@ body.is-transitioning {
 .transition-overlay.is-visible {
     opacity: 1;
     transform: scale(1.02);
+    pointer-events: auto;
 }
 
 .transition-overlay__text {

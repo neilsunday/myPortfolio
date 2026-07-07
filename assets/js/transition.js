@@ -29,16 +29,6 @@
         });
     };
 
-    const getHudText = () => {
-        const hudTopRight = document.querySelector('.hud-top-right');
-        const hudBottomLeft = document.querySelector('.hud-bottom-left');
-
-        return {
-            topRight: hudTopRight ? hudTopRight.textContent.trim() : '',
-            bottomLeft: hudBottomLeft ? hudBottomLeft.textContent.trim() : ''
-        };
-    };
-
     const updateHudState = (isTransitioning) => {
         const hudTopRight = document.querySelector('.hud-top-right');
         const hudBottomLeft = document.querySelector('.hud-bottom-left');
@@ -107,7 +97,7 @@
         }
     };
 
-    const beginTransition = (event, targetUrl, label) => {
+    const beginTransition = (event, link, targetUrl, label, target) => {
         if (transitionActive) {
             event.preventDefault();
             return;
@@ -117,7 +107,7 @@
         event.preventDefault();
         playClickSound();
 
-        const selectedItem = event.target.closest('.menu-item');
+        const selectedItem = link.closest('.menu-item');
         prepareExitState(selectedItem, label);
 
         const overlay = createOverlay(label);
@@ -132,12 +122,19 @@
         });
 
         window.setTimeout(() => {
-            window.location.href = targetUrl;
+            if (target === '_blank') {
+                window.open(targetUrl, '_blank', 'noopener,noreferrer');
+            } else {
+                window.location.assign(targetUrl);
+            }
         }, TRANSITION_DURATION);
     };
 
     const handleLinkClick = (event) => {
-        const link = event.target.closest('a');
+        const targetElement = event.target;
+        const link = targetElement && typeof targetElement.closest === 'function'
+            ? targetElement.closest('a')
+            : null;
 
         if (!link) {
             return;
@@ -149,13 +146,9 @@
         }
 
         const absoluteHref = new URL(href, window.location.href);
-        const isSameOrigin = absoluteHref.origin === window.location.origin;
-        if (!isSameOrigin) {
-            return;
-        }
-
         const label = link.dataset.transitionLabel || link.dataset.transitionText || link.textContent.trim() || 'INITIALIZING...';
-        beginTransition(event, absoluteHref.pathname, label.toUpperCase());
+        const shouldOpenInNewTab = link.getAttribute('target') === '_blank';
+        beginTransition(event, link, absoluteHref.href, label.toUpperCase(), shouldOpenInNewTab ? '_blank' : 'self');
     };
 
     const animateIntoView = () => {

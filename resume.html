@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="assets/css/menu.css">
+    <link rel="stylesheet" href="assets/css/transition.css">
+    <link rel="stylesheet" href="assets/css/resume.css">
+</head>
+<body>
+    <div class="cursor-glow" aria-hidden="true"></div>
+    <div class="menu-scene" aria-hidden="true">
+        <div class="ambient ambient-one"></div>
+        <div class="ambient ambient-two"></div>
+        <div class="ambient ambient-three"></div>
+        <div class="particle-field">
+            <span class="particle particle-1"></span>
+            <span class="particle particle-2"></span>
+            <span class="particle particle-3"></span>
+            <span class="particle particle-4"></span>
+            <span class="particle particle-5"></span>
+            <span class="particle particle-6"></span>
+        </div>
+    </div>
+
+    <main class="page-shell" role="main">
+        <div class="hud hud-top-left">PERSONAL PORTFOLIO</div>
+        <div class="hud hud-top-right">ONLINE</div>
+
+        <a class="back-link" href="index.html" data-transition-label="RETURNING TO MENU...">← MAIN MENU</a>
+
+        <header class="page-heading">
+            <h1 class="page-heading__title">RESUME</h1>
+            <p class="page-heading__subtitle">Professional Information</p>
+        </header>
+
+        <section class="resume-grid" aria-label="Resume sections">
+            <article class="resume-card">
+                <h2 class="resume-card__title">Education</h2>
+                <div class="resume-list">
+                    <div class="resume-item">
+                        <span class="resume-item__label">Institution</span>
+                        <div class="resume-item__value">Placeholder University<br>Computer Science & Design</div>
+                    </div>
+                    <div class="resume-item">
+                        <span class="resume-item__label">Focus</span>
+                        <div class="resume-item__value">Human-Computer Interaction, Systems Design, Full Stack Development</div>
+                    </div>
+                </div>
+            </article>
+            <article class="resume-card">
+                <h2 class="resume-card__title">Experience</h2>
+                <div class="resume-list">
+                    <div class="resume-item">
+                        <span class="resume-item__label">Current Role</span>
+                        <div class="resume-item__value">Senior Interface Developer<br>Placeholder Studio / 2024–Present</div>
+                    </div>
+                    <div class="resume-item">
+                        <span class="resume-item__label">Previous Role</span>
+                        <div class="resume-item__value">Junior Web Engineer<br>Prototype Lab / 2021–2024</div>
+                    </div>
+                </div>
+            </article>
+            <article class="resume-card">
+                <h2 class="resume-card__title">Technical Skills</h2>
+                <div class="resume-list">
+                    <div class="resume-item">
+                        <span class="resume-item__label">Core Stack</span>
+                        <div class="resume-item__value">HTML, CSS, JavaScript, PHP, MySQL, Python</div>
+                    </div>
+                    <div class="resume-item">
+                        <span class="resume-item__label">Workflow</span>
+                        <div class="resume-item__value">Responsive Design, UI Systems, Git, Performance Optimization</div>
+                    </div>
+                </div>
+            </article>
+            <article class="resume-card">
+                <h2 class="resume-card__title">Languages</h2>
+                <div class="resume-list">
+                    <div class="resume-item">
+                        <span class="resume-item__label">Spoken</span>
+                        <div class="resume-item__value">English, Spanish, French</div>
+                    </div>
+                    <div class="resume-item">
+                        <span class="resume-item__label">Tools</span>
+                        <div class="resume-item__value">VS Code, GitHub, Figma, Docker</div>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <a class="action-btn" href="#">Download Resume</a>
+
+        <div class="hud hud-bottom-left">SYSTEM READY</div>
+        <div class="hud hud-bottom-right">
+            <span>Version 1.0</span>
+            <span id="clock">00:00:00</span>
+        </div>
+    </main>
+
+    <script src="assets/js/menu.js"></script>
+    <script src="assets/js/transition.js"></script>
+    <script src="assets/js/resume.js"></script>
+</body>
+</html>

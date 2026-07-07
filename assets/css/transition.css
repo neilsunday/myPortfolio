@@ -1,0 +1,125 @@
+:root {
+    --transition-cyan: #5fe8ff;
+    --transition-bg: rgba(2, 5, 8, 0.84);
+}
+
+body.is-transitioning {
+    overflow: hidden;
+}
+
+.transition-overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.9rem;
+    background: rgba(2, 5, 8, 0.72);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 20;
+    transition: opacity 180ms ease;
+}
+
+.transition-overlay.is-visible {
+    opacity: 1;
+}
+
+.transition-overlay__text {
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 0.82rem;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: #f4ffff;
+    opacity: 0.9;
+}
+
+.transition-overlay__line {
+    width: min(84vw, 320px);
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--transition-cyan), transparent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 720ms cubic-bezier(0.2, 0.8, 0.2, 1);
+    box-shadow: 0 0 10px rgba(95, 232, 255, 0.25);
+}
+
+.menu-shell.is-exiting,
+.page-shell.is-exiting {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.985);
+    transition: opacity 360ms ease, transform 360ms ease;
+}
+
+.game-title.is-exiting,
+.page-title.is-exiting {
+    transform: translateY(-8px);
+    transition: transform 360ms ease, opacity 360ms ease;
+}
+
+.menu-item.is-fading,
+.page-nav-link.is-fading {
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: opacity 240ms ease, transform 240ms ease;
+}
+
+.menu-shell,
+.page-shell {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 520ms ease, transform 520ms ease;
+}
+
+.page-shell {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: clamp(2rem, 6vw, 4.2rem);
+    color: var(--text-cyan);
+}
+
+.page-title {
+    margin: 0 0 0.8rem;
+    font-family: Consolas, "Courier New", monospace;
+    font-size: clamp(2rem, 4vw, 3rem);
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: #dffbff;
+    text-shadow: 0 0 10px rgba(95, 232, 255, 0.2);
+}
+
+.page-shell .portfolio-label {
+    margin: 0;
+    font-size: 0.72rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: rgba(200, 248, 255, 0.7);
+}
+
+.menu-shell.is-entering,
+.page-shell.is-entering,
+body.has-entered .menu-shell,
+body.has-entered .page-shell {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.game-title,
+.page-title {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 520ms ease, transform 520ms ease;
+}
+
+.game-title.is-entering,
+.page-title.is-entering {
+    opacity: 1;
+    transform: translateY(0);
+}

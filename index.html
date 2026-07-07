@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Neil Sunday personal portfolio main menu">
+    <title>neilsunday.0 | Main Menu</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="assets/css/menu.css">
+    <link rel="stylesheet" href="assets/css/transition.css">
+</head>
+<body>
+    <div class="cursor-glow" aria-hidden="true"></div>
+
+    <div class="menu-scene" aria-hidden="true">
+        <div class="ambient ambient-one"></div>
+        <div class="ambient ambient-two"></div>
+        <div class="ambient ambient-three"></div>
+        <div class="particle-field">
+            <span class="particle particle-1"></span>
+            <span class="particle particle-2"></span>
+            <span class="particle particle-3"></span>
+            <span class="particle particle-4"></span>
+            <span class="particle particle-5"></span>
+            <span class="particle particle-6"></span>
+        </div>
+    </div>
+
+    <main class="menu-shell" role="main">
+        <div class="hud hud-top-left">PERSONAL PORTFOLIO</div>
+        <div class="hud hud-top-right">ONLINE</div>
+
+        <header class="menu-header">
+            <p class="portfolio-label">PERSONAL PORTFOLIO</p>
+            <h1 class="game-title" aria-label="NEILSUNDAY.0">
+                <span>N</span><span>E</span><span>I</span><span>L</span>
+            </h1>
+        </header>
+
+        <nav class="menu-nav" aria-label="Main menu">
+            <a class="menu-item" href="projects.html" data-transition-label="OPENING PROJECTS...">
+                <span class="menu-item__line"></span>
+                <span class="menu-item__content">
+                    <span class="menu-item__title">View Projects</span>
+                    <span class="menu-item__subtitle">Browse my development projects</span>
+                </span>
+                <span class="menu-item__arrow">›</span>
+            </a>
+            <a class="menu-item" href="resume.html" data-transition-label="LOADING RESUME...">
+                <span class="menu-item__line"></span>
+                <span class="menu-item__content">
+                    <span class="menu-item__title">Resume</span>
+                    <span class="menu-item__subtitle">Download my resume</span>
+                </span> 
+                <span class="menu-item__arrow">›</span>
+            </a>
+            <a class="menu-item" href="skills.html" data-transition-label="ACCESSING SKILLS...">
+                <span class="menu-item__line"></span>
+                <span class="menu-item__content">
+                    <span class="menu-item__title">Skills</span>
+                    <span class="menu-item__subtitle">Explore my technical skills</span>
+                </span>
+                <span class="menu-item__arrow">›</span>
+            </a>
+            <a class="menu-item" href="achievements.html" data-transition-label="OPENING ACHIEVEMENTS...">
+                <span class="menu-item__line"></span>
+                <span class="menu-item__content">
+                    <span class="menu-item__title">Certificates</span>
+                    <span class="menu-item__subtitle">View certifications and highlights</span>
+                </span>
+                <span class="menu-item__arrow">›</span>
+            </a>
+            <a class="menu-item" href="profile.html" data-transition-label="OPENING PROFILE...">
+                <span class="menu-item__line"></span>
+                <span class="menu-item__content">
+                    <span class="menu-item__title">About Me</span>
+                    <span class="menu-item__subtitle">Learn more about me</span>
+                </span>
+                <span class="menu-item__arrow">›</span>
+            </a>
+            <a class="menu-item" href="contact.html" data-transition-label="ESTABLISHING CONTACT...">
+                <span class="menu-item__line"></span>
+                <span class="menu-item__content">
+                    <span class="menu-item__title">CONNECT</span>
+                    <span class="menu-item__subtitle">Get in touch</span>
+                </span>
+                <span class="menu-item__arrow">›</span>
+            </a>
+        </nav>
+
+        <div class="hud hud-bottom-left">Contact</div>
+        <div class="hud hud-bottom-right">
+            <span>Version 1.0</span>
+            <span id="clock">00:00:00</span>
+        </div>
+    </main>
+
+    <script src="assets/js/menu.js"></script>
+    <script src="assets/js/transition.js"></script>
+</body>
+</html>

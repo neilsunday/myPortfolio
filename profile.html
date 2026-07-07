@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Me</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="assets/css/menu.css">
+    <link rel="stylesheet" href="assets/css/transition.css">
+    <link rel="stylesheet" href="assets/css/about.css">
+</head>
+<body>
+    <div class="cursor-glow" aria-hidden="true"></div>
+    <div class="menu-scene" aria-hidden="true">
+        <div class="ambient ambient-one"></div>
+        <div class="ambient ambient-two"></div>
+        <div class="ambient ambient-three"></div>
+        <div class="particle-field">
+            <span class="particle particle-1"></span>
+            <span class="particle particle-2"></span>
+            <span class="particle particle-3"></span>
+            <span class="particle particle-4"></span>
+            <span class="particle particle-5"></span>
+            <span class="particle particle-6"></span>
+        </div>
+    </div>
+
+    <main class="page-shell" role="main">
+        <div class="hud hud-top-left">PERSONAL PORTFOLIO</div>
+        <div class="hud hud-top-right">ONLINE</div>
+
+        <a class="back-link" href="index.html" data-transition-label="RETURNING TO MENU...">← MAIN MENU</a>
+
+        <header class="page-heading">
+            <h1 class="page-heading__title">ABOUT ME</h1>
+            <p class="page-heading__subtitle">Player Information</p>
+        </header>
+
+        <section class="profile-grid" aria-label="Profile information">
+            <article class="profile-card">
+                <h2 class="profile-card__title">Mission Brief</h2>
+                <p class="profile-bio">This placeholder profile panel is designed to hold the player's background, focus areas, and long-term mission in a clean, polished layout. Replace the copy later with your own narrative and positioning.</p>
+            </article>
+            <article class="profile-card">
+                <h2 class="profile-card__title">Player Stats</h2>
+                <div class="profile-list">
+                    <div class="profile-item"><span class="profile-item__label">Player Name</span><span class="profile-item__value">Placeholder Name</span></div>
+                    <div class="profile-item"><span class="profile-item__label">Class</span><span class="profile-item__value">Developer</span></div>
+                    <div class="profile-item"><span class="profile-item__label">Role</span><span class="profile-item__value">Interface Builder</span></div>
+                    <div class="profile-item"><span class="profile-item__label">Level</span><span class="profile-item__value">08</span></div>
+                    <div class="profile-item"><span class="profile-item__label">Specialization</span><span class="profile-item__value">UI / Front End</span></div>
+                    <div class="profile-item"><span class="profile-item__label">Location</span><span class="profile-item__value">Remote</span></div>
+                    <div class="profile-item"><span class="profile-item__label">Mission</span><span class="profile-item__value">Craft polished digital experiences</span></div>
+                </div>
+            </article>
+        </section>
+
+        <div class="hud hud-bottom-left">SYSTEM READY</div>
+        <div class="hud hud-bottom-right">
+            <span>Version 1.0</span>
+            <span id="clock">00:00:00</span>
+        </div>
+    </main>
+
+    <script src="assets/js/menu.js"></script>
+    <script src="assets/js/transition.js"></script>
+    <script src="assets/js/about.js"></script>
+</body>
+</html>

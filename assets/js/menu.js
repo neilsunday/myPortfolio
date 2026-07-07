@@ -34,8 +34,15 @@ interactiveElements.forEach((item) => {
         document.body.classList.remove('menu-hover');
     });
 
-    item.addEventListener('click', () => {
-        playSound(clickSound);
+    item.addEventListener('click', (event) => {
+        if (item.matches('a')) {
+            event.preventDefault();
+        }
+
+        if (!item.classList.contains('menu-item')) {
+            playSound(clickSound);
+        }
+
         if (item.classList.contains('menu-item')) {
             document.querySelectorAll('.menu-item').forEach((entry) => entry.classList.remove('is-active'));
             item.classList.add('is-active');

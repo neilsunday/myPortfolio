@@ -10,97 +10,90 @@ body.is-transitioning {
 .transition-overlay {
     position: fixed;
     inset: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 0.9rem;
-    background: rgba(2, 5, 8, 0.72);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background: rgba(2, 5, 8, 0.78);
+    backdrop-filter: blur(1.4px);
+    -webkit-backdrop-filter: blur(1.4px);
     opacity: 0;
     pointer-events: none;
     z-index: 20;
-    transition: opacity 180ms ease;
+    transform: scale(1);
+    transition: opacity 220ms ease, transform 780ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .transition-overlay.is-visible {
     opacity: 1;
+    transform: scale(1.02);
 }
 
 .transition-overlay__text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     font-family: Consolas, "Courier New", monospace;
-    font-size: 0.82rem;
-    letter-spacing: 0.32em;
+    font-size: 0.76rem;
+    letter-spacing: 0.3em;
     text-transform: uppercase;
     color: #f4ffff;
-    opacity: 0.9;
+    opacity: 0.92;
 }
 
 .transition-overlay__line {
-    width: min(84vw, 320px);
+    position: absolute;
+    left: 50%;
+    bottom: clamp(1.4rem, 3vh, 2.2rem);
+    width: min(74vw, 320px);
     height: 1px;
     background: linear-gradient(90deg, transparent, var(--transition-cyan), transparent);
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 720ms cubic-bezier(0.2, 0.8, 0.2, 1);
-    box-shadow: 0 0 10px rgba(95, 232, 255, 0.25);
+    transform: translateX(-50%) scaleX(0);
+    transform-origin: center;
+    transition: transform 760ms cubic-bezier(0.2, 0.8, 0.2, 1);
+    box-shadow: 0 0 10px rgba(95, 232, 255, 0.24);
 }
 
 .menu-shell.is-exiting,
 .page-shell.is-exiting {
     opacity: 0;
     transform: translateY(-8px) scale(0.985);
-    transition: opacity 360ms ease, transform 360ms ease;
+    transition: opacity 340ms ease, transform 340ms ease;
 }
 
 .game-title.is-exiting,
-.page-title.is-exiting {
-    transform: translateY(-8px);
-    transition: transform 360ms ease, opacity 360ms ease;
+.page-heading__title.is-exiting {
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 320ms ease, transform 320ms ease;
 }
 
-.menu-item.is-fading,
-.page-nav-link.is-fading {
-    opacity: 0;
-    transform: translateX(-10px);
-    transition: opacity 240ms ease, transform 240ms ease;
+.menu-item.is-fading {
+    opacity: 0.15;
+    transform: translateX(0);
+    transition: opacity 260ms ease, transform 260ms ease;
+}
+
+.menu-item.is-active {
+    opacity: 1;
+    color: #f4ffff;
+}
+
+.menu-item.is-active .menu-item__title {
+    transform: translateX(4px);
+    color: #f4ffff;
+}
+
+.menu-item.is-active .menu-item__subtitle {
+    color: rgba(244, 255, 255, 0.95);
+}
+
+.menu-item.is-active .menu-item__subtitle.is-loading {
+    color: #f4ffff;
 }
 
 .menu-shell,
 .page-shell {
     opacity: 0;
-    transform: translateY(16px);
-    transition: opacity 520ms ease, transform 520ms ease;
-}
-
-.page-shell {
-    position: relative;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    padding: clamp(2rem, 6vw, 4.2rem);
-    color: var(--text-cyan);
-}
-
-.page-title {
-    margin: 0 0 0.8rem;
-    font-family: Consolas, "Courier New", monospace;
-    font-size: clamp(2rem, 4vw, 3rem);
-    letter-spacing: 0.28em;
-    text-transform: uppercase;
-    color: #dffbff;
-    text-shadow: 0 0 10px rgba(95, 232, 255, 0.2);
-}
-
-.page-shell .portfolio-label {
-    margin: 0;
-    font-size: 0.72rem;
-    letter-spacing: 0.24em;
-    text-transform: uppercase;
-    color: rgba(200, 248, 255, 0.7);
+    transform: translateY(24px) scale(0.995);
+    transition: opacity 580ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 580ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .menu-shell.is-entering,
@@ -108,20 +101,52 @@ body.is-transitioning {
 body.has-entered .menu-shell,
 body.has-entered .page-shell {
     opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+.hud {
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 520ms ease, transform 520ms ease;
+}
+
+.hud.is-visible,
+.hud.is-transitioning {
+    opacity: 1;
     transform: translateY(0);
 }
 
 .game-title,
-.page-title {
-    opacity: 1;
-    transform: translateY(0);
+.page-heading__title,
+.portfolio-label,
+.page-heading__subtitle,
+.back-link {
+    opacity: 0;
+    transform: translateY(16px);
     transition: opacity 520ms ease, transform 520ms ease;
 }
 
 .game-title.is-entering,
-.page-title.is-entering {
+.page-heading__title.is-entering,
+.portfolio-label.is-visible,
+.page-heading__subtitle.is-visible,
+.back-link.is-visible,
+.game-title.is-visible,
+.page-heading__title.is-visible {
     opacity: 1;
     transform: translateY(0);
+}
+
+.project-card,
+.resume-card,
+.skill-item,
+.certificate-card,
+.profile-card,
+.contact-card,
+.action-btn {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 540ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 540ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .project-card.is-visible,
@@ -129,8 +154,8 @@ body.has-entered .page-shell {
 .skill-item.is-visible,
 .certificate-card.is-visible,
 .profile-card.is-visible,
-.contact-card.is-visible {
+.contact-card.is-visible,
+.action-btn.is-visible {
     opacity: 1;
     transform: translateY(0);
-    transition: opacity 420ms ease, transform 420ms ease;
 }

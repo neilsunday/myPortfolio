@@ -123,3 +123,14 @@ body.has-entered .page-shell {
     opacity: 1;
     transform: translateY(0);
 }
+
+.project-card.is-visible,
+.resume-card.is-visible,
+.skill-item.is-visible,
+.certificate-card.is-visible,
+.profile-card.is-visible,
+.contact-card.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 420ms ease, transform 420ms ease;
+}

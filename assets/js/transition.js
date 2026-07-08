@@ -1,14 +1,13 @@
 (function () {
-    const TRANSITION_DURATION = 150;
+    const TRANSITION_DURATION = 640;
+    const HOLD_ACTIVE_DURATION = 100;
+    const SHATTER_STAGGER = 24;
+    const SHATTER_PAUSE = 150;
     const bodyTransitionClass = 'is-transitioning';
-    const cursorClass = 'terminal-cursor';
     const contentClass = 'is-visible';
     const typingSpeed = 34;
-    const backspaceSpeed = 16;
     const typingPause = 360;
-    const erasePause = 220;
     let transitionActive = false;
-    let cursorElement = null;
     let clickSound = null;
 
     const createSound = () => {
@@ -42,41 +41,6 @@
         };
         window.requestAnimationFrame(tick);
     });
-
-    const getCursor = () => {
-        if (!cursorElement) {
-            cursorElement = document.createElement('span');
-            cursorElement.className = cursorClass;
-            cursorElement.setAttribute('aria-hidden', 'true');
-            cursorElement.textContent = '_';
-            document.body.appendChild(cursorElement);
-        }
-        return cursorElement;
-    };
-
-    const showCursor = (target) => {
-        const cursor = getCursor();
-        if (target) {
-            positionCursor(target);
-        }
-        cursor.classList.add('is-visible');
-    };
-
-    const hideCursor = () => {
-        const cursor = getCursor();
-        cursor.classList.remove('is-visible');
-    };
-
-    const positionCursor = (target) => {
-        const cursor = getCursor();
-        if (!target) {
-            return;
-        }
-
-        const rect = target.getBoundingClientRect();
-        cursor.style.left = `${window.scrollX + rect.right + 6}px`;
-        cursor.style.top = `${window.scrollY + rect.top + rect.height / 2 - 10}px`;
-    };
 
     const setTextContent = (element, value) => {
         if (!element) {
@@ -142,7 +106,6 @@
         const value = targetText || saveOriginalText(element) || '';
         element.classList.add('terminal-animated-text');
         setTextContent(element, '');
-        showCursor(element);
 
         return new Promise((resolve) => {
             let index = 0;
@@ -156,7 +119,6 @@
 
                 if (index < value.length) {
                     setTextContent(element, value.slice(0, index + 1));
-                    positionCursor(element);
                     applyTextReveal(element, 'typing');
                     index += 1;
                     nextFrameAt = now + speed;
@@ -172,58 +134,22 @@
         });
     }
 
-    function backspaceText(element, speed = backspaceSpeed) {
-        if (!element) {
-            return Promise.resolve();
-        }
-
-        const value = saveOriginalText(element) || '';
-        element.classList.add('terminal-animated-text');
-        let currentLength = element.textContent.length || value.length;
-        showCursor(element);
-
-        return new Promise((resolve) => {
-            let nextFrameAt = performance.now();
-
-            const step = (now) => {
-                if (now < nextFrameAt) {
-                    window.requestAnimationFrame(step);
-                    return;
-                }
-
-                if (currentLength > 0) {
-                    const nextValue = value.slice(0, currentLength - 1);
-                    setTextContent(element, nextValue);
-                    positionCursor(element);
-                    applyTextReveal(element, 'erasing');
-                    currentLength -= 1;
-                    nextFrameAt = now + speed;
-                    window.requestAnimationFrame(step);
-                    return;
-                }
-
-                setTextContent(element, '');
-                positionCursor(element);
-                finishTextReveal(element);
-                resolve();
-            };
-
-            window.requestAnimationFrame(step);
-        });
-    }
-
-    const getEraseTargets = (selectedItem) => {
+    const getShatterTargets = (selectedItem) => {
         const targets = [];
+        const pushText = (element) => {
+            if (!element || !element.isConnected) {
+                return;
+            }
+
+            const text = (element.textContent || '').trim();
+            if (text) {
+                targets.push(element);
+            }
+        };
 
         if (selectedItem) {
-            const selectedSubtitle = selectedItem.querySelector('.menu-item__subtitle');
-            const selectedTitle = selectedItem.querySelector('.menu-item__title');
-            if (selectedSubtitle) {
-                targets.push(selectedSubtitle);
-            }
-            if (selectedTitle) {
-                targets.push(selectedTitle);
-            }
+            pushText(selectedItem.querySelector('.menu-item__title'));
+            pushText(selectedItem.querySelector('.menu-item__subtitle'));
         }
 
         document.querySelectorAll('.menu-item').forEach((item) => {
@@ -231,34 +157,17 @@
                 return;
             }
 
-            const title = item.querySelector('.menu-item__title');
-            const subtitle = item.querySelector('.menu-item__subtitle');
-            if (title) {
-                targets.push(title);
-            }
-            if (subtitle) {
-                targets.push(subtitle);
-            }
+            pushText(item.querySelector('.menu-item__title'));
+            pushText(item.querySelector('.menu-item__subtitle'));
         });
 
-        document.querySelectorAll('.hud').forEach((hud) => {
-            if (hud.textContent.trim()) {
-                targets.push(hud);
-            }
-        });
-
-        document.querySelectorAll('.back-link, .portfolio-label, .page-heading__subtitle').forEach((element) => {
-            if (element.textContent.trim()) {
-                targets.push(element);
-            }
-        });
+        document.querySelectorAll('.hud').forEach((hud) => pushText(hud));
+        document.querySelectorAll('.back-link, .portfolio-label, .page-heading__subtitle').forEach((element) => pushText(element));
 
         const mainTitle = document.querySelector('.game-title, .page-heading__title');
-        if (mainTitle && mainTitle.textContent.trim()) {
-            targets.push(mainTitle);
-        }
+        pushText(mainTitle);
 
-        return targets;
+        return targets.filter((element, index, array) => array.indexOf(element) === index);
     };
 
     const getEntryTargets = () => {
@@ -283,7 +192,73 @@
         return targets;
     };
 
-    async function erasePage(selectedItem) {
+    const ensureShatterLayer = () => {
+        let layer = document.querySelector('.transition-shatter-layer');
+        if (!layer) {
+            layer = document.createElement('div');
+            layer.className = 'transition-shatter-layer';
+            layer.setAttribute('aria-hidden', 'true');
+            document.body.appendChild(layer);
+        }
+        return layer;
+    };
+
+    const createShatterFragments = (element, layer) => {
+        const rect = element.getBoundingClientRect();
+        const text = (element.textContent || '').replace(/\s+/g, ' ').trim();
+        if (!text || (!rect.width && !rect.height)) {
+            return [];
+        }
+
+        const style = window.getComputedStyle(element);
+        const fragments = [];
+        const chars = Array.from(text);
+        let cursorX = 0;
+
+        chars.forEach((char) => {
+            if (char === ' ') {
+                cursorX += 8;
+                return;
+            }
+
+            const fragment = document.createElement('span');
+            fragment.className = 'transition-shatter-fragment';
+            fragment.textContent = char;
+            fragment.style.position = 'absolute';
+            fragment.style.left = '0px';
+            fragment.style.top = '0px';
+            fragment.style.color = style.color;
+            fragment.style.font = style.font;
+            fragment.style.fontFamily = style.fontFamily;
+            fragment.style.fontSize = style.fontSize;
+            fragment.style.fontWeight = style.fontWeight;
+            fragment.style.fontStyle = style.fontStyle;
+            fragment.style.letterSpacing = style.letterSpacing;
+            fragment.style.textTransform = style.textTransform;
+            fragment.style.lineHeight = style.lineHeight;
+            layer.appendChild(fragment);
+
+            const width = fragment.getBoundingClientRect().width || 8;
+            fragment.style.left = `${rect.left + cursorX}px`;
+            fragment.style.top = `${rect.top}px`;
+            cursorX += width + 2;
+
+            fragments.push(fragment);
+        });
+
+        return fragments;
+    };
+
+    const hideTransitionTarget = (element) => {
+        if (!element) {
+            return;
+        }
+
+        element.style.visibility = 'hidden';
+        element.style.opacity = '0';
+    };
+
+    async function shatterPage(selectedItem) {
         if (transitionActive) {
             return;
         }
@@ -303,16 +278,37 @@
             element.classList.add('is-disabled');
         });
 
-        const targets = getEraseTargets(selectedItem);
-        showCursor(targets[0]);
+        const layer = ensureShatterLayer();
+        const targets = getShatterTargets(selectedItem);
+        targets.forEach(hideTransitionTarget);
 
-        for (const target of targets) {
-            await backspaceText(target, backspaceSpeed);
-        }
+        const groups = [
+            targets.filter((element) => element.classList.contains('game-title') || element.classList.contains('page-heading__title')),
+            targets.filter((element) => element.classList.contains('menu-item__subtitle') || element.classList.contains('portfolio-label') || element.classList.contains('page-heading__subtitle')),
+            targets.filter((element) => element.classList.contains('menu-item__title')),
+            targets.filter((element) => element.classList.contains('hud')),
+            targets.filter((element) => element.classList.contains('back-link'))
+        ];
 
-        hideCursor();
-        await wait(erasePause);
+        const fragmentsByGroup = groups.map((group) => group.flatMap((target) => createShatterFragments(target, layer)));
+        const fragmentGroups = fragmentsByGroup.filter((group) => group.length > 0);
 
+        fragmentGroups.forEach((group, index) => {
+            window.setTimeout(() => {
+                group.forEach((fragment) => {
+                    const x = (Math.random() * 120 - 60);
+                    const y = (Math.random() * 120 - 60);
+                    const rotation = (Math.random() * 50 - 25);
+                    fragment.style.setProperty('--dx', `${x}px`);
+                    fragment.style.setProperty('--dy', `${y}px`);
+                    fragment.style.setProperty('--rotation', `${rotation}deg`);
+                    fragment.classList.add('is-shattering');
+                });
+            }, index * SHATTER_STAGGER);
+        });
+
+        await wait(TRANSITION_DURATION + SHATTER_PAUSE + (fragmentGroups.length - 1) * SHATTER_STAGGER);
+        layer.remove();
         return true;
     }
 
@@ -361,10 +357,12 @@
         playClickSound();
 
         const selectedItem = link.closest('.menu-item');
-        const started = await erasePage(selectedItem);
+        const started = await shatterPage(selectedItem);
         if (!started) {
             return;
         }
+
+        await wait(HOLD_ACTIVE_DURATION);
 
         if (target === '_blank') {
             window.open(targetUrl, '_blank', 'noopener,noreferrer');

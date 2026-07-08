@@ -1,5 +1,5 @@
 :root {
-    --panel-border: rgba(95, 232, 255, 0.18);
+    --panel-border: rgba(168, 116, 69, 0.28);
 }
 
 .page-shell {
@@ -46,7 +46,7 @@
     font-size: clamp(1.5rem, 3vw, 2.2rem);
     letter-spacing: 0.28em;
     text-transform: uppercase;
-    color: #dffbff;
+    color: #F5E6D2;
 }
 
 .page-heading__subtitle {
@@ -54,7 +54,7 @@
     font-size: clamp(0.72rem, 1vw, 0.9rem);
     letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: rgba(200, 248, 255, 0.72);
+    color: #CDB89A;
 }
 
 .profile-grid {
@@ -67,7 +67,7 @@
 .profile-card {
     padding: clamp(0.95rem, 1.5vw, 1.2rem);
     border: 1px solid var(--panel-border);
-    background: linear-gradient(135deg, rgba(6, 12, 19, 0.95), rgba(11, 20, 28, 0.84));
+    background: linear-gradient(135deg, rgba(42, 32, 25, 0.95), rgba(33, 25, 20, 0.9));
     backdrop-filter: blur(10px);
     opacity: 0;
     transform: translateY(18px);
@@ -79,7 +79,7 @@
     font-size: 1rem;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: #f4ffff;
+    color: #F5E6D2;
 }
 
 .profile-list {
@@ -92,7 +92,7 @@
     justify-content: space-between;
     gap: 1rem;
     padding-bottom: 0.7rem;
-    border-bottom: 1px solid rgba(95, 232, 255, 0.12);
+    border-bottom: 1px solid rgba(168, 116, 69, 0.24);
 }
 
 .profile-item:last-child {
@@ -101,19 +101,19 @@
 }
 
 .profile-item__label {
-    color: rgba(200, 248, 255, 0.72);
+    color: #CDB89A;
     text-transform: uppercase;
     letter-spacing: 0.16em;
     font-size: 0.74rem;
 }
 
 .profile-item__value {
-    color: #f4ffff;
+    color: #F5E6D2;
     text-align: right;
 }
 
 .profile-bio {
-    color: rgba(200, 248, 255, 0.78);
+    color: #EBC69A;
     line-height: 1.45;
     font-size: 0.84rem;
 }

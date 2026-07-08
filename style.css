@@ -1,9 +1,17 @@
 :root {
     color-scheme: dark;
-    --page-bg: #06080d;
-    --text-cyan: #8fe7ff;
-    --text-subtle: rgba(143, 231, 255, 0.65);
-    --line-cyan: #4fe3ff;
+    --page-bg: #18120D;
+    --page-bg-alt: #211914;
+    --panel-bg: #2A2019;
+    --panel-dark: #3B2A21;
+    --border-soft: #5A4231;
+    --accent: #A87445;
+    --light-brown: #C69C6D;
+    --tan: #D8B487;
+    --peach: #EBC69A;
+    --text-cyan: #F5E6D2;
+    --text-subtle: #CDB89A;
+    --line-cyan: #A87445;
 }
 
 * {

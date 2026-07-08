@@ -1,6 +1,6 @@
 :root {
-    --transition-cyan: #5fe8ff;
-    --transition-bg: rgba(2, 5, 8, 0.84);
+    --transition-cyan: #A87445;
+    --transition-bg: rgba(24, 18, 13, 0.84);
 }
 
 body.is-transitioning {
@@ -33,7 +33,7 @@ body.is-terminal-transition .game-title span {
     font-size: 1rem;
     line-height: 1;
     color: var(--transition-cyan);
-    text-shadow: 0 0 6px rgba(95, 232, 255, 0.26);
+    text-shadow: 0 0 6px rgba(168, 116, 69, 0.24);
     opacity: 0;
     pointer-events: none;
     z-index: 40;
@@ -48,11 +48,11 @@ body.is-terminal-transition .game-title span {
 
 @keyframes cursorBlink {
     0%, 100% {
-        text-shadow: 0 0 4px rgba(95, 232, 255, 0.2);
+        text-shadow: 0 0 4px rgba(168, 116, 69, 0.18);
         transform: translateY(-0.1em) scale(1);
     }
     50% {
-        text-shadow: 0 0 9px rgba(95, 232, 255, 0.55), 0 0 16px rgba(95, 232, 255, 0.24);
+        text-shadow: 0 0 9px rgba(168, 116, 69, 0.46), 0 0 16px rgba(168, 116, 69, 0.2);
         transform: translateY(-0.1em) scale(1.01);
     }
 }
@@ -66,13 +66,13 @@ body.is-terminal-transition .game-title span {
 
 .terminal-animated-text.is-typing {
     color: #f8ffff;
-    text-shadow: 0 0 6px rgba(95, 232, 255, 0.16);
+    text-shadow: 0 0 6px rgba(168, 116, 69, 0.14);
     animation: terminalTypePulse 110ms ease-in-out infinite alternate, terminalTypeShake 110ms ease-in-out infinite;
 }
 
 .terminal-animated-text.is-erasing {
     opacity: 0.82;
-    text-shadow: 0 0 3px rgba(95, 232, 255, 0.1);
+    text-shadow: 0 0 3px rgba(168, 116, 69, 0.1);
     animation: terminalEraseShake 90ms ease-in-out infinite;
 }
 
@@ -103,12 +103,12 @@ body.is-terminal-transition .game-title span {
 
 .menu-item.is-active {
     opacity: 1;
-    color: #f4ffff;
+    color: #F5E6D2;
 }
 
 .menu-item.is-active .menu-item__title,
 .menu-item.is-active .menu-item__subtitle {
-    color: #f4ffff;
+    color: #F5E6D2;
 }
 
 body.is-transitioning .menu-item:not(.is-active) {
@@ -142,5 +142,51 @@ body.is-transitioning .menu-item:not(.is-active) {
 .is-disabled {
     pointer-events: none;
     opacity: 0.45;
+}
+
+.transition-shatter-layer {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.transition-shatter-fragment {
+    display: inline-block;
+    position: absolute;
+    white-space: pre;
+    will-change: transform, opacity, filter;
+    opacity: 1;
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    filter: blur(0px);
+    pointer-events: none;
+}
+
+.transition-shatter-fragment.is-shattering {
+    animation: textShatterBurst var(--duration, 640ms) cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes textShatterBurst {
+    0% {
+        opacity: 1;
+        transform: translate(0, 0) scale(1) rotate(0deg);
+        filter: blur(0px);
+    }
+    15% {
+        opacity: 1;
+        transform: translate(calc(var(--dx) * 0.25), calc(var(--dy) * 0.25)) scale(1.05) rotate(calc(var(--rotation) * 0.6));
+        filter: blur(0.4px);
+    }
+    70% {
+        opacity: 0.45;
+        transform: translate(var(--dx), var(--dy)) scale(0.95) rotate(var(--rotation));
+        filter: blur(1px);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(calc(var(--dx) * 1.1), calc(var(--dy) * 1.1)) scale(0) rotate(calc(var(--rotation) * 1.1));
+        filter: blur(1px);
+    }
 }
 

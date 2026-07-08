@@ -210,7 +210,7 @@ body {
 .game-button:hover .menu-item__subtitle,
 .game-button:focus-visible .menu-item__subtitle {
     opacity: 1;
-    color: #EBC69A;
+    color: peachpuff;
 }
 
 .game-button:active {

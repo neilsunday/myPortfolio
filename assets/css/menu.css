@@ -156,6 +156,7 @@ body::after {
     align-items: flex-start;
     text-align: left;
     padding: clamp(1rem, 3.2vh, 2.2rem);
+    padding-right: clamp(1.2rem, 3.8vw, 2.3rem);
     isolation: isolate;
 }
 
@@ -208,7 +209,7 @@ body::after {
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: clamp(0.2rem, 0.8vh, 0.4rem);
+    gap: clamp(0.5rem, 1vh, 0.7rem);
     align-items: flex-start;
     max-width: 480px;
 }
@@ -217,8 +218,13 @@ body::after {
     position: relative;
     display: flex;
     align-items: center;
-    width: 100%;
-    padding: clamp(0.7rem, 1.3vh, 0.95rem) 0;
+    justify-content: flex-start;
+    width: min(100%, 72%);
+    max-width: 270px;
+    min-height: clamp(4rem, 5.4vh, 4.5rem);
+    margin: 0;
+    align-self: flex-start;
+    padding: 0;
     color: var(--text-cyan);
     font-family: Consolas, "Courier New", monospace;
     font-size: clamp(0.9rem, 1.4vw, 1.05rem);
@@ -228,7 +234,13 @@ body::after {
     opacity: 0;
     transform: translateX(-12px);
     animation: itemIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-    transition: transform 0.3s ease, color 0.3s ease;
+    transition: transform 0.2s ease, color 0.2s ease;
+    isolation: isolate;
+    overflow: hidden;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100% 100%;
 }
 
 .menu-item:nth-child(2) { animation-delay: 0.14s; }
@@ -237,16 +249,8 @@ body::after {
 .menu-item:nth-child(5) { animation-delay: 0.56s; }
 .menu-item:nth-child(6) { animation-delay: 0.7s; }
 
-.menu-item::before {
-    content: "";
-    position: absolute;
-    inset: 0 0 auto 0;
-    height: 1px;
-    background: rgba(95, 232, 255, 0.25);
-    transform: scaleX(0.84);
-    transform-origin: left;
-    opacity: 0.45;
-    transition: opacity 0.3s ease, background 0.3s ease;
+.game-button {
+    background-image: url("../image/buttons/button-idle.png");
 }
 
 .menu-item__line {
@@ -258,101 +262,89 @@ body::after {
     background: transparent;
     transform: translateY(-50%);
     transition: height 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+    display: none;
 }
 
-.menu-item__content {
+.game-button .menu-item__content {
     display: flex;
+    flex: 1;
     flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
     gap: 0.2rem;
-    transition: transform 0.3s ease;
-}
-
-.menu-item__title {
     position: relative;
     z-index: 1;
-    transition: transform 0.3s ease, color 0.3s ease;
+    width: 100%;
+    min-height: 100%;
+    padding: clamp(0.75rem, 1.3vw, 1.05rem) clamp(1rem, 2.2vw, 1.55rem);
+    transition: transform 0.2s ease;
 }
 
-.menu-item__subtitle {
+.game-button .menu-item__title {
+    position: relative;
+    z-index: 1;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.game-button .menu-item__subtitle {
     font-size: clamp(0.62rem, 0.95vw, 0.72rem);
     letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--text-subtle);
-    transition: color 0.3s ease;
+    opacity: 0.82;
+    transition: color 0.2s ease, opacity 0.2s ease;
 }
 
-.menu-item__arrow {
-    margin-left: auto;
-    font-size: 1rem;
-    color: var(--line-cyan);
-    opacity: 0;
-    transform: translateX(-8px);
-    transition: opacity 0.3s ease, transform 0.3s ease;
+.game-button .menu-item__arrow {
+    display: none;
 }
 
-.menu-item:hover,
-.menu-item:focus-visible {
-    transform: translateX(10px);
+.game-button:hover,
+.game-button:focus-visible {
+    transform: translateX(6px);
     color: #f4ffff;
+    background-image: url("../image/buttons/button-hover.png");
 }
 
-.menu-item:hover .menu-item__content,
-.menu-item:focus-visible .menu-item__content {
+.game-button:hover .menu-item__content,
+.game-button:focus-visible .menu-item__content {
     transform: translateX(6px);
 }
 
-.menu-item:hover .menu-item__title,
-.menu-item:focus-visible .menu-item__title {
+.game-button:hover .menu-item__title,
+.game-button:focus-visible .menu-item__title {
     transform: translateX(6px);
     color: #f4ffff;
 }
 
-.menu-item:hover .menu-item__subtitle,
-.menu-item:focus-visible .menu-item__subtitle {
-    color: rgba(244, 255, 255, 0.95);
-}
-
-.menu-item:hover .menu-item__arrow,
-.menu-item:focus-visible .menu-item__arrow {
+.game-button:hover .menu-item__subtitle,
+.game-button:focus-visible .menu-item__subtitle {
     opacity: 1;
-    transform: translateX(0);
+    color: rgba(244, 255, 255, 0.95);
 }
 
-.menu-item:hover .menu-item__line,
-.menu-item:focus-visible .menu-item__line {
-    height: 72%;
-    background: var(--line-cyan);
-    box-shadow: 0 0 8px rgba(95, 232, 255, 0.35);
+.game-button:active {
+    transform: translate(6px, 2px) scale(0.98);
 }
 
-.menu-item:hover::before,
-.menu-item:focus-visible::before {
-    opacity: 0.8;
-    background: rgba(95, 232, 255, 0.45);
+.game-button.is-active {
+    transform: translateX(6px);
+    color: #f4ffff;
+    background-image: url("../image/buttons/button-hover.png");
 }
 
-.menu-item:active {
-    transform: translateX(4px);
+.game-button.is-active .menu-item__content {
+    transform: translateX(6px);
 }
 
-.menu-item.is-active {
+.game-button.is-active .menu-item__title {
     transform: translateX(6px);
     color: #f4ffff;
 }
 
-.menu-item.is-active .menu-item__title {
-    transform: translateX(4px);
-    color: #f4ffff;
-}
-
-.menu-item.is-active .menu-item__subtitle {
+.game-button.is-active .menu-item__subtitle {
+    opacity: 1;
     color: rgba(244, 255, 255, 0.95);
-}
-
-.menu-item.is-active .menu-item__line {
-    height: 72%;
-    background: var(--line-cyan);
-    box-shadow: 0 0 8px rgba(95, 232, 255, 0.35);
 }
 
 .hud {

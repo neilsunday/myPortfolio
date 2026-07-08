@@ -1,5 +1,9 @@
-const hoverSound = new Audio('assets/sounds/hover.mp3');
 const clickSound = new Audio('assets/sounds/click.mp3');
+const buttonImageSources = ['assets/image/buttons/button-idle.png', 'assets/image/buttons/button-hover.png'];
+buttonImageSources.forEach((src) => {
+    const image = new Image();
+    image.src = src;
+});
 const interactiveElements = document.querySelectorAll('.menu-item, .back-link, .action-btn, .project-card, .resume-card, .skill-item, .certificate-card, .profile-card, .contact-card');
 const cursorGlow = document.querySelector('.cursor-glow');
 const clock = document.getElementById('clock');
@@ -27,7 +31,6 @@ const updateClock = () => {
 interactiveElements.forEach((item) => {
     item.addEventListener('mouseenter', () => {
         document.body.classList.add('menu-hover');
-        playSound(hoverSound);
     });
 
     item.addEventListener('mouseleave', () => {

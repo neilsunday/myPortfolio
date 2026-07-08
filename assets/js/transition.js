@@ -3,6 +3,10 @@
     const bodyTransitionClass = 'is-transitioning';
     const cursorClass = 'terminal-cursor';
     const contentClass = 'is-visible';
+    const typingSpeed = 34;
+    const backspaceSpeed = 16;
+    const typingPause = 360;
+    const erasePause = 220;
     let transitionActive = false;
     let cursorElement = null;
     let clickSound = null;
@@ -27,7 +31,17 @@
         });
     };
 
-    const wait = (duration) => new Promise((resolve) => window.setTimeout(resolve, duration));
+    const wait = (duration) => new Promise((resolve) => {
+        const startedAt = performance.now();
+        const tick = (now) => {
+            if (now - startedAt >= duration) {
+                resolve();
+                return;
+            }
+            window.requestAnimationFrame(tick);
+        };
+        window.requestAnimationFrame(tick);
+    });
 
     const getCursor = () => {
         if (!cursorElement) {
@@ -70,6 +84,7 @@
         }
 
         element.textContent = value;
+        element.classList.add('terminal-animated-text');
     };
 
     const saveOriginalText = (element) => {
@@ -82,60 +97,118 @@
         return value;
     };
 
-    function typeText(element, targetText, speed = 28) {
+    const applyTextReveal = (element, phase) => {
+        if (!element) {
+            return;
+        }
+
+        element.classList.remove('is-typing', 'is-erasing');
+        if (phase === 'typing') {
+            element.classList.add('is-typing');
+            element.style.opacity = '0.96';
+            window.requestAnimationFrame(() => {
+                if (element.isConnected) {
+                    element.style.opacity = '1';
+                }
+            });
+            return;
+        }
+
+        if (phase === 'erasing') {
+            element.classList.add('is-erasing');
+            element.style.opacity = '0.9';
+            window.requestAnimationFrame(() => {
+                if (element.isConnected) {
+                    element.style.opacity = '0.82';
+                }
+            });
+        }
+    };
+
+    const finishTextReveal = (element) => {
+        if (!element) {
+            return;
+        }
+
+        element.classList.remove('is-typing', 'is-erasing');
+        element.style.opacity = '';
+    };
+
+    function typeText(element, targetText, speed = typingSpeed) {
         if (!element) {
             return Promise.resolve();
         }
 
         const value = targetText || saveOriginalText(element) || '';
+        element.classList.add('terminal-animated-text');
         setTextContent(element, '');
         showCursor(element);
 
         return new Promise((resolve) => {
             let index = 0;
+            let nextFrameAt = performance.now();
 
-            const step = () => {
-                if (index <= value.length) {
-                    setTextContent(element, value.slice(0, index));
-                    positionCursor(element);
-                    index += 1;
-                    window.setTimeout(step, speed);
+            const step = (now) => {
+                if (now < nextFrameAt) {
+                    window.requestAnimationFrame(step);
                     return;
                 }
 
+                if (index < value.length) {
+                    setTextContent(element, value.slice(0, index + 1));
+                    positionCursor(element);
+                    applyTextReveal(element, 'typing');
+                    index += 1;
+                    nextFrameAt = now + speed;
+                    window.requestAnimationFrame(step);
+                    return;
+                }
+
+                finishTextReveal(element);
                 resolve();
             };
 
-            step();
+            window.requestAnimationFrame(step);
         });
     }
 
-    function backspaceText(element, speed = 24) {
+    function backspaceText(element, speed = backspaceSpeed) {
         if (!element) {
             return Promise.resolve();
         }
 
         const value = saveOriginalText(element) || '';
+        element.classList.add('terminal-animated-text');
         let currentLength = element.textContent.length || value.length;
         showCursor(element);
 
         return new Promise((resolve) => {
-            const step = () => {
+            let nextFrameAt = performance.now();
+
+            const step = (now) => {
+                if (now < nextFrameAt) {
+                    window.requestAnimationFrame(step);
+                    return;
+                }
+
                 if (currentLength > 0) {
                     const nextValue = value.slice(0, currentLength - 1);
                     setTextContent(element, nextValue);
-                    currentLength -= 1;
                     positionCursor(element);
-                    window.setTimeout(step, speed);
+                    applyTextReveal(element, 'erasing');
+                    currentLength -= 1;
+                    nextFrameAt = now + speed;
+                    window.requestAnimationFrame(step);
                     return;
                 }
 
                 setTextContent(element, '');
                 positionCursor(element);
+                finishTextReveal(element);
                 resolve();
             };
 
-            step();
+            window.requestAnimationFrame(step);
         });
     }
 
@@ -234,12 +307,11 @@
         showCursor(targets[0]);
 
         for (const target of targets) {
-            await backspaceText(target, 24);
-            await wait(12);
+            await backspaceText(target, backspaceSpeed);
         }
 
         hideCursor();
-        await wait(150);
+        await wait(erasePause);
 
         return true;
     }
@@ -249,6 +321,8 @@
         document.documentElement.classList.add('is-terminal-transition');
 
         const targets = getEntryTargets();
+        const menuTargets = targets.filter((element) => element.closest('.menu-item'));
+        const otherTargets = targets.filter((element) => !element.closest('.menu-item'));
         const cardNodes = document.querySelectorAll('.project-card, .resume-card, .skill-item, .certificate-card, .profile-card, .contact-card, .action-btn');
 
         targets.forEach((element) => {
@@ -256,9 +330,16 @@
             setTextContent(element, '');
         });
 
-        for (const target of targets) {
-            await typeText(target, target.dataset.transitionOriginal || '', 26);
-            await wait(22);
+        if (menuTargets.length) {
+            await Promise.all(menuTargets.map((target, index) => (async () => {
+                await wait(index * 50);
+                await typeText(target, target.dataset.transitionOriginal || '', typingSpeed);
+            })()));
+        }
+
+        for (const target of otherTargets) {
+            await typeText(target, target.dataset.transitionOriginal || '', typingSpeed);
+            await wait(typingPause);
         }
 
         cardNodes.forEach((node, index) => {
